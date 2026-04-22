@@ -1,4 +1,4 @@
-
+import React from "react"
 // const heading= React.createElement("h1",{id:"headind"},"Hello world from react");
 // const root=ReactDOM.createRoot(document.getElementById("root"))
 // root.render(heading)
