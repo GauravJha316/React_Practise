@@ -1,4 +1,4 @@
-import RestaurantCard from "./Restaurantcard";
+import RestaurantCard, {withPromotedLabel} from "./Restaurantcard";
 import resList from "../utils/mockData.js"
 import { useState, useEffect  } from "react";
 import { Link } from "react-router-dom";
@@ -11,10 +11,14 @@ const Body=()=>{
   const[listOfRestaurants,setListOfRestaurants]=useState([]);
 
 const [searchText, setSearchText]=useState("")
+
+const RestaurantCardPromoted=withPromotedLabel(RestaurantCard)
 const [filteredRestaurant, setFilteredRestaurant]=useState([]);
   useEffect (()=>{
     fetchData();
   }, []);
+
+  console.log("Body Render",listOfRestaurants)
 
   const fetchData = async() =>{
     const data = await fetch(
@@ -38,19 +42,20 @@ if (onlineStatus === false) {
   // }
   return listOfRestaurants.length ===0 ? <Shimmer/> :(
     <div className="body">
-      <div className="filter">
-        <div className="search">
-          <input type="text" className="search-box" value={searchText} onChange={(e)=>{
+      <div className="filter flex">
+        <div className="search m-4 p-4">
+          <input type="text" className="border borser-solid border-black" value={searchText} onChange={(e)=>{
             setSearchText(e.target.value)
           }}/>
-          <button onClick={()=>{
+
+          <button className="px-4 py-2 bg-green-100 m-4" onClick={()=>{
           console.log(searchText)
           const filteredRestaurant= listOfRestaurants.filter((res)=>res.info.name.toLowerCase()===searchText.toLowerCase());
 
           setFilteredRestaurant(filteredRestaurant)
           }}>Search</button>
         </div>
-        <button className="filter-btn" onClick={()=>{
+        <button className="px-4 py-2 bg-gray-100 rounded-lg" onClick={()=>{
           const filteredList=listOfRestaurants.filter(
             (res)=>res.info.avgRating >4.5
           );
@@ -67,19 +72,28 @@ if (onlineStatus === false) {
           }}
         ></button> */}
       </div>
-      <div className="res-container">
-        {filteredRestaurant.map((restaurant)=>(
-         <Link  key={restaurant.info.id}  to={"/restaurants/"+restaurant.info.id}> <RestaurantCard
-          resData={restaurant} /> </Link>
-        ))}
+    <div className="flex flex-wrap">
+  {filteredRestaurant.map((restaurant) => (
+    <Link
+      key={restaurant.info.id}
+      to={"/restaurants/" + restaurant.info.id}
+    >
+      {restaurant.info?.avgRating > 4.5 ? (
+        <RestaurantCardPromoted resData={restaurant} />
+      ) : (
+        <RestaurantCard resData={restaurant} />
+      )}
+    </Link>
+  ))}
+</div>
+    </div>
+  ) ;
+};
+
+export default Body;
+
         {/* {
           resList.map((restaurant => <RestaurantCard key={restaurant.info.id} resData={restaurant}/>
           )
           )
         } */}
-      </div>
-    </div>
-  ) 
-}
-
-export default Body;
