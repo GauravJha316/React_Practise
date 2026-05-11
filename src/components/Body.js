@@ -1,11 +1,12 @@
 import RestaurantCard, {withPromotedLabel} from "./Restaurantcard";
 import resList from "../utils/mockData.js"
-import { useState, useEffect  } from "react";
+import { useState, useEffect, useContext  } from "react";
 import { Link } from "react-router-dom";
 // import resList from "../utils/mockData.js";
 import Shimmer from "./Shimmer.js";
 import useOnlineStatus from "../utils/useOnlineStatus.js";
 import onlineStatus from "../utils/useOnlineStatus.js";
+import UserContext from "../utils/UserContext.js";
 const Body=()=>{
   //local state variable superpower variable
   const[listOfRestaurants,setListOfRestaurants]=useState([]);
@@ -37,6 +38,9 @@ if (onlineStatus === false) {
       <h1>Looks like you're offline. Please check your internet connection.</h1>
    );
 }
+
+const {loggedInUser,setUserName}= useContext(UserContext);
+
   // if(listOfRestaurants.length ===0){
   //   return <Shimmer/>
   // }
@@ -55,12 +59,23 @@ if (onlineStatus === false) {
           setFilteredRestaurant(filteredRestaurant)
           }}>Search</button>
         </div>
-        <button className="px-4 py-2 bg-gray-100 rounded-lg" onClick={()=>{
+        <div className="search m-4 p-4 flex items-center">
+        <button 
+        className="px-4 py-2 bg-gray-100 rounded-lg"
+         onClick={()=>{
           const filteredList=listOfRestaurants.filter(
             (res)=>res.info.avgRating >4.5
           );
           setListOfRestaurants(filteredList)
         }}>Top Rated Restaurants</button>
+        </div>
+        <div >
+          <label>UserName :</label>
+          <input className="border border-black" 
+          value={loggedInUser}
+          onChange={(e)=>setUserName(e.target.value)}/>
+        </div>
+        
           {/* <button
           className="filter-btn"
           onClick={() => {
@@ -86,6 +101,7 @@ if (onlineStatus === false) {
     </Link>
   ))}
 </div>
+
     </div>
   ) ;
 };

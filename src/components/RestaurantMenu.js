@@ -13,7 +13,8 @@ const RestaurantMenu = () => {
     const {resId} = useParams();
 
     const resInfo=useRestaurantMenu(resId)
-
+    const[showItems, setShowItems]=useState(false)
+    const [showIndex,setShowIndex]=useState(null);
 
 // const fetchMenu = async () => {
 //   const data = await fetch(
@@ -46,9 +47,13 @@ const RestaurantMenu = () => {
         <p className='font-bold text-lg'>{cuisines?.join(", ")}</p>
         <p  className='font-bold text-lg'>{costForTwoMessage}</p>
         
-        {categories.map((category)=> <RestaurantCategory data={category?.card?.card}/>)}
-
-
+        {categories.map((category,index)=> 
+        //controlled component
+        <RestaurantCategory   key={category?.card?.card?.categoryId} data={category?.card?.card}
+        showItems={index===showIndex ? true : false}
+        setShowIndex={()=> setShowIndex(index)}
+        />
+        )}
     {/* <ul>
         {itemCards?.map((item)=>
         <li key={item.card.info.id}>
