@@ -1,7 +1,7 @@
 import { CDN_URL } from "../utils/constants"
 const RestaurantCard =(props) =>{
   const {resData}=props
-
+  console.log("Props",resData);
   const{cloudinaryImageId,name,avgRating,cuisines,deliveryTime}=resData?.info
   return(
     <div className="m-4 p-4 w-[250px] rounded-lg bg-gray-100 hover:bg-gray-600">
